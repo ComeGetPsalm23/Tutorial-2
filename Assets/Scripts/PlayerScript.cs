@@ -11,7 +11,13 @@ public class PlayerScript : MonoBehaviour
 
     public Text score;
 
+    public Text winText;
+
+    public Text loseText;
+
     private int scoreValue = 0;
+    private int lifeValue = 3;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,19 +44,31 @@ public class PlayerScript : MonoBehaviour
         {
             scoreValue += 1;
             score.text = scoreValue.ToString();
+            if (scoreValue == 8)
+            {
+                winText.text = "You Win! Game by Joseph Medina.";
+
+            }
             Destroy(collision.collider.gameObject);
         }
-
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Ground")
+        if (collision.collider.tag == "Enemy")
         {
-            if (Input.GetKey(KeyCode.W))
+            lifeValue -= 1;
+            score.text = scoreValue.ToString();
+            if (scoreValue == 0)
             {
-                rd2d.AddForce(new Vector2(0, 3), ForceMode2D.Impulse); //the 3 in this line of code is the player's "jumpforce," and you change that number to get different jump behaviors. You can also create a public variable for it and then edit it in the inspector.
+                loseText.text = "You Lose";
             }
+            Destroy(collision.collider.gameObject);
         }
+        
+            if (collision.collider.tag == "Ground")
+            {
+                if (Input.GetKey(KeyCode.W))
+                {
+                    rd2d.AddForce(new Vector2(0, 3), ForceMode2D.Impulse); //the 3 in this line of code is the player's "jumpforce," and you change that number to get different jump behaviors. You can also create a public variable for it and then edit it in the inspector.
+                }
+            }
     }
 }
+
